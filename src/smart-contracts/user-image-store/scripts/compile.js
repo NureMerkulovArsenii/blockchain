@@ -1,7 +1,7 @@
 const fs = require('fs');
 const solc = require('solc');
 
-const source = fs.readFileSync('./../contracts/UserImageStore.sol', 'utf8');
+const source = fs.readFileSync("F:\\Univer\\4_course\\1_semester\\blockchain\\blockchain\\src\\smart-contracts\\user-image-store\\contracts\\UserImageStore.sol", 'utf8');
 const input = {
     language: 'Solidity',
     sources: {

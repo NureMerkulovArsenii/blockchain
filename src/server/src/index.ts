@@ -4,11 +4,17 @@ import bodyParser from "body-parser";
 import auth from "./api/auth.routes";
 import image from "./api/image.routes";
 import cors from "cors";
+import { buildClient } from "./clients/smart-contract-client/smart-contract.client";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+buildClient().then(() => {
+  console.log("Smart contract client built");
+});
+
 
 const requestLogger = function (req: Request, res: Response, next: NextFunction) {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} body: ${JSON.stringify(req.body)}`);
