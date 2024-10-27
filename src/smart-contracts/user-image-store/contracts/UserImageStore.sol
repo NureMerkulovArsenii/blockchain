@@ -22,9 +22,6 @@ contract UserImageStore {
     mapping(uint256 => Image) private images;
     uint256 private nextImageId;
 
-    event UserLoggedOut(bytes32 indexed id);
-    event ImageStored(bytes32 indexed userId, uint256 imageId);
-
     function registerUser(string memory _login, string memory _password) public {
         User memory user;
         user.login = _login;
@@ -68,6 +65,30 @@ contract UserImageStore {
             imageName: _imageName,
             canBeExchanged: _canBeExchanged
         });
+    }
+
+    function exchangeImages(
+        uint256 ciIdToSuggest,
+        uint256 ciToExchange,
+        string memory ownerLogin,
+        string memory exchangerLogin
+    ) public {
+        User storage owner = users[ownerLogin];
+        User storage exchanger = users[exchangerLogin];
+        
+        require(owner.isLoggedIn, "Owner must be logged in.");
+        require(exchanger.isLoggedIn, "Exchanger must be logged in.");
+
+        Image storage imageToSuggest = images[ciIdToSuggest];
+        Image storage imageToExchange = images[ciToExchange];
+
+        require(keccak256(abi.encodePacked(imageToSuggest.userLogin)) == keccak256(abi.encodePacked(ownerLogin)), "Image to suggest does not belong to owner.");
+        require(keccak256(abi.encodePacked(imageToExchange.userLogin)) == keccak256(abi.encodePacked(exchangerLogin)), "Image to exchange does not belong to exchanger.");
+        require(imageToSuggest.canBeExchanged, "Image to suggest is not exchangeable.");
+        require(imageToExchange.canBeExchanged, "Image to exchange is not exchangeable.");
+
+        imageToSuggest.userLogin = exchangerLogin;
+        imageToExchange.userLogin = ownerLogin;
     }
 
     function getImagesByUserLogin(string memory userLogin) public view returns (Image[] memory) {

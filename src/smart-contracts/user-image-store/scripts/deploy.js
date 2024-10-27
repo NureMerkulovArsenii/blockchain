@@ -43,7 +43,7 @@ describe('UserImageStore Contract', function () {
 
     it('should store images for users', async () => {
         await userImageStore.methods.storeImage("testUser1", web3.utils.keccak256("image1Hash"), true, "Image1", true).send({ from: accounts[0] });
-        await userImageStore.methods.storeImage("testUser2", web3.utils.keccak256("image2Hash"), false, "Image2", false).send({ from: accounts[1] });
+        await userImageStore.methods.storeImage("testUser2", web3.utils.keccak256("image2Hash"), false, "Image2", true).send({ from: accounts[1] });
     });
 
     it('should retrieve images by userLogin', async () => {
@@ -61,6 +61,16 @@ describe('UserImageStore Contract', function () {
 
         expect(publicImages).to.be.an('array').that.is.not.empty;
         expect(publicImages[0].imageName).to.equal("Image1");
+    });
+
+    it('should exchange images between two users', async () => {
+        await userImageStore.methods.exchangeImages(0, 1, "testUser1", "testUser2").send({ from: accounts[0] });
+
+        const imagesUser1 = await userImageStore.methods.getImagesByUserLogin("testUser1").call();
+        const imagesUser2 = await userImageStore.methods.getImagesByUserLogin("testUser2").call();
+
+        expect(imagesUser1[0].imageName).to.equal("Image2");
+        expect(imagesUser2[0].imageName).to.equal("Image1");
     });
 
     it('should log out a user and fail getImagesByUserLogin after logout', async () => {
