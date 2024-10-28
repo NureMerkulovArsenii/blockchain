@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-contract UserImageStore {
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract UserImageStore is ERC721, Ownable {
     struct Image {
         string userLogin;
         bytes32 imageHash;
@@ -18,9 +21,10 @@ contract UserImageStore {
     }
 
     mapping(string => User) private users;
-
     mapping(uint256 => Image) private images;
     uint256 private nextImageId;
+
+    constructor() ERC721("UserImageToken", "UIT") Ownable(0x2e509A864c6376107155B0Bfb70f91FB370D876E) { }
 
     function registerUser(string memory _login, string memory _password) public {
         User memory user;
@@ -65,6 +69,8 @@ contract UserImageStore {
             imageName: _imageName,
             canBeExchanged: _canBeExchanged
         });
+
+        _mint(msg.sender, imageId);
     }
 
     function exchangeImages(
