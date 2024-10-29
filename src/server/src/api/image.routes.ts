@@ -3,6 +3,7 @@ import { authUser, getUserName } from './utils/jwt.validate';
 import { uploadImage } from '../handlers/image/upload.handler';
 import { getAllImages } from '../handlers/image/get-all-images.handler';
 import fileUpload from 'express-fileupload';
+import { getUserImages } from '../handlers/image/get-my-images.handler';
 
 
 const router = express.Router();
@@ -11,6 +12,12 @@ const router = express.Router();
 router.get("/get-all", authUser, async (req: Request, res: Response) => {
     const images = await getAllImages();
     res.json(images);
+});
+
+router.get("/my-images", authUser, async (req: Request, res: Response) => {
+    const username = getUserName(req);
+    const images = await getUserImages(username);
+    res.json(images);    
 });
 
 router.post("/upload", authUser, async (req: Request, res: Response) => {

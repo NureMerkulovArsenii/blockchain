@@ -19,6 +19,10 @@ export class ImageService {
     return this.httpClient.get<ImageListItem[]>(this.baseUrl + '/get-all');
   }
 
+  getMyImages() : Observable<ImageListItem[]> {
+    return this.httpClient.get<ImageListItem[]>(this.baseUrl + '/my-images');
+  }
+
   uploadImage(image: FormData) : Observable<Object> {
     return this.httpClient.post(this.baseUrl + '/upload', image);
   }

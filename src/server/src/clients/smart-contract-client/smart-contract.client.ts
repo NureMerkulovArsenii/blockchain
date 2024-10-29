@@ -74,7 +74,7 @@ export async function storeImage(
     }
 }
 
-export async function getImagesByUserLogin(userLogin: string): Promise<string[]> {
+export async function getImagesByUserLogin(userLogin: string): Promise<Image[]> {
     try {
         const images = await contract.methods.getImagesByUserLogin(userLogin).call();
         return images;

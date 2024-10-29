@@ -1,1 +1,19 @@
-<app-image-list [images]="images | async"></app-image-list>
+<!-- <app-image-list [images]="images | async"></app-image-list> -->
+
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+    <mat-tab label="All images">
+        <ng-template matTabContent>
+            <app-image-list></app-image-list>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="My images">
+        <ng-template matTabContent>
+            <app-my-images></app-my-images>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="My exchange requests">
+        <ng-template matTabContent>
+            <app-my-images></app-my-images>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

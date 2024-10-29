@@ -1,16 +1,17 @@
-<div class="image-list-item">
-    <div class="image-preview">
-        <img [src]="uploadedImageUrl" alt="{{ imageItem.imageName }}" width="200" height="200" />
-    </div>
-
-    <input type="hidden" [value]="imageItem.username" />
-
-    <h4>{{ imageItem.imageName }}</h4>
-    <p>Image CID: {{ imageItem.imageCid }}</p>
-
-    <div *ngIf="imageItem.canBeExchanged">
-        <button class="btn btn-warning" (click)="requestExchange()">
-            Request Exchange
+<mat-card class="image-list-item">
+    <mat-card-header>
+        <mat-card-title>{{imageItem.imageName}}</mat-card-title>
+        <mat-card-subtitle>{{imageItem.imageCid.length > 10 ? (imageItem.imageCid | slice:0:10) + '...' : imageItem.imageCid}}</mat-card-subtitle>
+        <button mat-icon-button (click)="copyToClipboard(imageItem.imageCid)" width="10" height="10">
+            <mat-icon width="10" height="10">content_copy</mat-icon>
         </button>
-    </div>
-</div>
+    </mat-card-header>
+    <mat-card-content>
+        <img mat-card-image [src]="uploadedImageUrl" alt="{{ imageItem.imageName }}" width="150">
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button (click)="requestExchange(imageItem.imageCid)" *ngIf="imageItem.canBeExchanged">
+            <mat-icon>sync</mat-icon>
+            Request Exchange</button>
+    </mat-card-actions>
+</mat-card>
