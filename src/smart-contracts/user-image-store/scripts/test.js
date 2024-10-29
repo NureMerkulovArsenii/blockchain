@@ -11,7 +11,7 @@ const deploy = async () => {
     accounts = await web3.eth.getAccounts();
     userImageStore = await new web3.eth.Contract(abi)
         .deploy({ data: bytecode })
-        .send({ from: accounts[1], gas: '30000000000' });
+        .send({ from: accounts[1], gas: 5000000 });
 };
 
 describe('UserImageStore Contract', function () {
