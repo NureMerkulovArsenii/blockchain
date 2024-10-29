@@ -1,0 +1,16 @@
+<div class="image-list-item">
+    <div class="image-preview">
+        <img [src]="uploadedImageUrl" alt="{{ imageItem.imageName }}" width="200" height="200" />
+    </div>
+
+    <input type="hidden" [value]="imageItem.username" />
+
+    <h4>{{ imageItem.imageName }}</h4>
+    <p>Image CID: {{ imageItem.imageCid }}</p>
+
+    <div *ngIf="imageItem.canBeExchanged">
+        <button class="btn btn-warning" (click)="requestExchange()">
+            Request Exchange
+        </button>
+    </div>
+</div>

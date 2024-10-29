@@ -18,3 +18,9 @@ export function authUser(req: Request, res: Response, next: NextFunction) {
         res.status(401).send("Unauthorized");
     }
 }
+
+export function getUserName(req: Request): string {
+    const token = req.headers.authorization!;
+    const decoded = verifyJwtToken(token);
+    return decoded.username;
+}

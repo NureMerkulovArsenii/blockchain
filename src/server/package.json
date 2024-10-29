@@ -14,14 +14,18 @@
   "description": "",
   "dependencies": {
     "@types/cors": "^2.8.17",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "express-fileupload": "^1.5.1",
     "jsonwebtoken": "^9.0.2",
+    "kubo-rpc-client": "^5.0.1",
     "web3": "^4.14.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/express-fileupload": "^1.5.1",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.8.1",
     "@types/web3": "^1.2.2",

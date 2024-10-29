@@ -22,36 +22,17 @@ export class AppComponent {
 
   constructor(
   ) {
+    this.isUserAuthenticated();
 
   }
 
   isUserAuthenticated(): boolean {
     const accessToken = localStorage.getItem('access_token');
+
     if (!accessToken) {
       this.isAuthenticated = false;
       return false;
-    }
-
-    const expiration = localStorage.getItem("expires_in");
-    const isoLoginTime = localStorage.getItem("login_time");
-
-    if (!expiration || !isoLoginTime) {
-      return false;
-    }
-
-    const expiresIn = parseInt(expiration);
-    const loginTime = new Date(isoLoginTime);
-    const now = new Date();
-    const diff = now.getTime() - loginTime.getTime();
-    const diffInSeconds = diff / 1000;
-
-    if (diffInSeconds > expiresIn) {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('expires_in');
-      localStorage.removeItem('login_time');
-      this.isAuthenticated = false;
-      return false;
-    }
+    }  
 
     this.isAuthenticated = true;
 

@@ -7,8 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract UserImageStore is ERC721, Ownable {
     struct Image {
         string userLogin;
-        bytes32 imageHash;
-        uint256 imageId;
+        string imageHash;
         bool visiblePublicly;
         string imageName;
         bool canBeExchanged;
@@ -21,8 +20,9 @@ contract UserImageStore is ERC721, Ownable {
     }
 
     mapping(string => User) private users;
-    mapping(uint256 => Image) private images;
-    uint256 private nextImageId;
+    mapping(string => Image) private images;
+    
+    string[] public imageHashes;
 
     constructor() ERC721("UserImageToken", "UIT") Ownable(0x2e509A864c6376107155B0Bfb70f91FB370D876E) { }
 
@@ -52,7 +52,7 @@ contract UserImageStore is ERC721, Ownable {
 
     function storeImage(
         string memory userLogin,
-        bytes32 _imageHash,
+        string memory _imageHash,
         bool _visiblePublicly,
         string memory _imageName,
         bool _canBeExchanged
@@ -60,22 +60,22 @@ contract UserImageStore is ERC721, Ownable {
         User storage user = users[userLogin];
         require(user.isLoggedIn, "User must be logged in to store images.");
 
-        uint256 imageId = nextImageId++; 
-        images[imageId] = Image({
+        imageHashes.push(_imageHash);
+
+        images[_imageHash] = Image({
             userLogin: userLogin,
             imageHash: _imageHash,
-            imageId: imageId,
             visiblePublicly: _visiblePublicly,
             imageName: _imageName,
             canBeExchanged: _canBeExchanged
         });
 
-        _mint(msg.sender, imageId);
+        _mint(msg.sender, uint256(keccak256(abi.encodePacked(_imageHash))));
     }
 
     function exchangeImages(
-        uint256 ciIdToSuggest,
-        uint256 ciToExchange,
+        string memory ciIdToSuggest,
+        string memory ciToExchange,
         string memory ownerLogin,
         string memory exchangerLogin
     ) public {
@@ -103,8 +103,9 @@ contract UserImageStore is ERC721, Ownable {
 
         uint256 userImageCount = 0;
 
-        for (uint256 i = 0; i < nextImageId; i++) {
-            if (keccak256(abi.encodePacked(images[i].userLogin)) == keccak256(abi.encodePacked(userLogin))) {
+        for (uint256 i = 0; i < imageHashes.length; i++) {
+            string memory imageHash = imageHashes[i];
+            if (keccak256(abi.encodePacked(images[imageHash].userLogin)) == keccak256(abi.encodePacked(userLogin))) {
                 userImageCount++;
             }
         }
@@ -112,9 +113,10 @@ contract UserImageStore is ERC721, Ownable {
         Image[] memory userImages = new Image[](userImageCount);
         uint256 index = 0;
 
-        for (uint256 i = 0; i < nextImageId; i++) {
-            if (keccak256(abi.encodePacked(images[i].userLogin)) == keccak256(abi.encodePacked(userLogin))) {
-                userImages[index] = images[i];
+        for (uint256 i = 0; i < imageHashes.length; i++) {
+            string memory imageHash = imageHashes[i];
+            if (keccak256(abi.encodePacked(images[imageHash].userLogin)) == keccak256(abi.encodePacked(userLogin))) {
+                userImages[index] = images[imageHash];
                 index++;
             }
         }
@@ -125,8 +127,9 @@ contract UserImageStore is ERC721, Ownable {
     function getImages() public view returns (Image[] memory) {
         uint256 totalPublicImages = 0;
 
-        for (uint256 i = 0; i < nextImageId; i++) {
-            if (images[i].visiblePublicly) {
+        for (uint256 i = 0; i < imageHashes.length; i++) {
+            string memory imageHash = imageHashes[i];
+            if (images[imageHash].visiblePublicly) {
                 totalPublicImages++;
             }
         }
@@ -134,9 +137,10 @@ contract UserImageStore is ERC721, Ownable {
         Image[] memory publicImages = new Image[](totalPublicImages);
         uint256 index = 0;
 
-        for (uint256 i = 0; i < nextImageId; i++) {
-            if (images[i].visiblePublicly) {
-                publicImages[index] = images[i];
+        for (uint256 i = 0; i < imageHashes.length; i++) {
+            string memory imageHash = imageHashes[i];
+            if (images[imageHash].visiblePublicly) {
+                publicImages[index] = images[imageHash];
                 index++;
             }
         }

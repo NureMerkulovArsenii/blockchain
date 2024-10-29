@@ -5,6 +5,8 @@ import auth from "./api/auth.routes";
 import image from "./api/image.routes";
 import cors from "cors";
 import { buildClient } from "./clients/smart-contract-client/smart-contract.client";
+import fileUpload from 'express-fileupload';
+
 
 dotenv.config();
 
@@ -16,14 +18,16 @@ buildClient().then(() => {
 });
 
 
+app.use(cors())
+app.use(bodyParser.json());
+app.use(fileUpload());
+app.use(express.urlencoded({extended: true}));
+
+
 const requestLogger = function (req: Request, res: Response, next: NextFunction) {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} body: ${JSON.stringify(req.body)}`);
   next()
 }
-
-app.use(cors())
-
-app.use(bodyParser.json());
 
 app.use(requestLogger)
 
@@ -33,7 +37,7 @@ app.get("/", (req: Request, res: Response) => {
 
 
 app.use("/auth", auth);
-app.use("/image", image);
+app.use("/images", image);
 
 
 app.listen(port, () => {

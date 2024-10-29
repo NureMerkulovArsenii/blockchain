@@ -1,3 +1,5 @@
+import { Image } from "../../models/image.model";
+
 const Web3Lib = require('web3');
 const { abi, bytecode } = require('./../../../../smart-contracts/user-image-store/scripts/compile');
 
@@ -20,11 +22,11 @@ async function deployContract() {
     accounts = await web3.eth.getAccounts();
     userImageStore = await new web3.eth.Contract(abi)
         .deploy({ data: bytecode })
-        .send({ from: accounts[0], gas: '3000000' });
+        .send({ from: accounts[0], gas: 5000000 });
 }
 
+//#region auth
 
-// Function to register a user
 export async function registerUser(login: string, password: string): Promise<boolean> {
     try{
         await contract.methods.registerUser(login, password).send({ from: fromAddress });
@@ -36,7 +38,6 @@ export async function registerUser(login: string, password: string): Promise<boo
     }
 }
 
-// Function to login a user
 export async function loginUser(login: string, password: string): Promise<boolean> {
     try {
         await contract.methods.loginUser(login, password).send({ from: fromAddress });
@@ -48,7 +49,50 @@ export async function loginUser(login: string, password: string): Promise<boolea
     }
 }
 
-// Function to logout a user
 export async function logoutUser(login: string): Promise<void> {
     await contract.methods.logoutUser(login).send({ from: fromAddress });
 }
+
+//#endregion
+
+
+//#region images
+
+export async function storeImage(
+    userLogin: string,
+    imageHash: string,
+    visiblePublicly: boolean,
+    imageName: string,
+    canBeExchanged: boolean
+): Promise<boolean> {
+    try {
+        await contract.methods.storeImage(userLogin, imageHash, true, imageName, true).send({ from: fromAddress });
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+export async function getImagesByUserLogin(userLogin: string): Promise<string[]> {
+    try {
+        const images = await contract.methods.getImagesByUserLogin(userLogin).call();
+        return images;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+export async function getImages(): Promise<Image[]> {
+    try {
+        const images = await contract.methods.getImages().call();
+        console.log(images);
+        return images;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+//#endregion

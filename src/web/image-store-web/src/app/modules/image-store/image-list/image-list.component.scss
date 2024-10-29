@@ -1,0 +1,21 @@
+.image-list {
+    padding: 20px;
+  }
+  
+  .image-list h2 {
+    margin-bottom: 15px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Space between items */
+  }
+  
+  .image-list-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    width: calc(33.333% - 10px); /* Three items per row */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
