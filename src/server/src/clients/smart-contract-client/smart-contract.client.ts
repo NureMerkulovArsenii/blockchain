@@ -1,3 +1,4 @@
+import { ExchangeRequest } from "../../models/exchange-request.model";
 import { Image } from "../../models/image.model";
 
 const Web3Lib = require('web3');
@@ -92,6 +93,46 @@ export async function getImages(): Promise<Image[]> {
     } catch (error) {
         console.error(error);
         return [];
+    }
+}
+
+export async function getExchangeRequests(): Promise<ExchangeRequest[]> {
+    try {
+        const exchangeRequests = await contract.methods.getExchangeRequests().call();
+        return exchangeRequests;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+export async function exchangeImages(imageHashToSuggest: string, imageHashToExchange: string, ownerLogin: string, exchangerLogin: string) {
+    try {
+        await contract.methods.exchangeImages(imageHashToSuggest, imageHashToExchange, ownerLogin, exchangerLogin);
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+export async function cancelExchangeRequest(ownerLogin: string, exchangerLogin: string, imageHashToSuggest: string, imageHashToExchange: string) {
+    try {
+        await contract.methods.cancelExchangeRequest(ownerLogin, exchangerLogin, imageHashToExchange, imageHashToSuggest);
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+export async function createExchangeRequest(ownerLogin: string, exchangerLogin: string, imageHashToSuggest: string, imageHashToExchange: string) {
+    try {
+        await contract.methods.createExchangeRequest(ownerLogin, exchangerLogin, imageHashToExchange, imageHashToSuggest);
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
     }
 }
 
