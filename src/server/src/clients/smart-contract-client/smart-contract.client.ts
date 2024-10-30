@@ -96,9 +96,9 @@ export async function getImages(): Promise<Image[]> {
     }
 }
 
-export async function getExchangeRequests(): Promise<ExchangeRequest[]> {
+export async function getExchangeRequests(userLogin: string): Promise<ExchangeRequest[]> {
     try {
-        const exchangeRequests = await contract.methods.getExchangeRequests().call();
+        const exchangeRequests = await contract.methods.getExchangeRequests(userLogin).call();
         return exchangeRequests;
     } catch (error) {
         console.error(error);
@@ -106,9 +106,9 @@ export async function getExchangeRequests(): Promise<ExchangeRequest[]> {
     }
 }
 
-export async function exchangeImages(imageHashToSuggest: string, imageHashToExchange: string, ownerLogin: string, exchangerLogin: string) {
+export async function exchangeImages(model: ExchangeRequest) {
     try {
-        await contract.methods.exchangeImages(imageHashToSuggest, imageHashToExchange, ownerLogin, exchangerLogin);
+        await contract.methods.exchangeImages(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange);
         return true;
     } catch (error) {
         console.error(error);
@@ -116,9 +116,9 @@ export async function exchangeImages(imageHashToSuggest: string, imageHashToExch
     }
 }
 
-export async function cancelExchangeRequest(ownerLogin: string, exchangerLogin: string, imageHashToSuggest: string, imageHashToExchange: string) {
+export async function cancelExchangeRequest(model: ExchangeRequest) {
     try {
-        await contract.methods.cancelExchangeRequest(ownerLogin, exchangerLogin, imageHashToExchange, imageHashToSuggest);
+        await contract.methods.cancelExchangeRequest(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange);
         return true;
     } catch (error) {
         console.error(error);
@@ -126,9 +126,9 @@ export async function cancelExchangeRequest(ownerLogin: string, exchangerLogin: 
     }
 }
 
-export async function createExchangeRequest(ownerLogin: string, exchangerLogin: string, imageHashToSuggest: string, imageHashToExchange: string) {
+export async function createExchangeRequest(model: ExchangeRequest) {
     try {
-        await contract.methods.createExchangeRequest(ownerLogin, exchangerLogin, imageHashToExchange, imageHashToSuggest);
+        await contract.methods.createExchangeRequest(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange);
         return true;
     } catch (error) {
         console.error(error);

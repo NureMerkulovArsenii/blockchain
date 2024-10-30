@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import auth from "./api/auth.routes";
 import image from "./api/image.routes";
+import exchange from "./api/exchange.routes";
 import cors from "cors";
 import { buildClient } from "./clients/smart-contract-client/smart-contract.client";
 import fileUpload from 'express-fileupload';
@@ -38,6 +39,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", auth);
 app.use("/images", image);
+app.use("/exchange", exchange);
 
 
 app.listen(port, () => {
