@@ -19,8 +19,16 @@ contract UserImageStore is ERC721, Ownable {
         bool isLoggedIn;
     }
 
+    struct ExchangeRequest {
+        string ownerLogin;
+        string exchangerLogin;
+        string imageHashToExchange;
+        string imageHashForExchange;
+    }
+
     mapping(string => User) private users;
     mapping(string => Image) private images;
+    mapping(string => ExchangeRequest[]) private exchangeRequests;
     
     string[] public imageHashes;
 
@@ -95,6 +103,27 @@ contract UserImageStore is ERC721, Ownable {
 
         imageToSuggest.userLogin = exchangerLogin;
         imageToExchange.userLogin = ownerLogin;
+
+        ExchangeRequest[] storage requests = exchangeRequests[ownerLogin];
+        bool requestFound = false;
+
+        for (uint256 i = 0; i < requests.length; i++) {
+            if (
+                keccak256(abi.encodePacked(requests[i].exchangerLogin)) == keccak256(abi.encodePacked(exchangerLogin)) &&
+                keccak256(abi.encodePacked(requests[i].imageHashToExchange)) == keccak256(abi.encodePacked(ciIdToSuggest)) &&
+                keccak256(abi.encodePacked(requests[i].imageHashForExchange)) == keccak256(abi.encodePacked(ciToExchange))
+            ) {
+                requestFound = true;
+
+                for (uint256 j = i; j < requests.length - 1; j++) {
+                    requests[j] = requests[j + 1];
+                }
+                requests.pop();
+                break;
+            }
+        }
+
+        require(requestFound, "Exchange request not found.");
     }
 
     function getImagesByUserLogin(string memory userLogin) public view returns (Image[] memory) {
@@ -146,5 +175,54 @@ contract UserImageStore is ERC721, Ownable {
         }
 
         return publicImages;
+    }
+
+    function getExchangeRequests(string memory ownerLogin) public view returns (ExchangeRequest[] memory) {
+        return exchangeRequests[ownerLogin];
+    }
+
+    function createExchangeRequest(
+        string memory ownerLogin,
+        string memory exchangerLogin,
+        string memory cidToExchange,
+        string memory cidForExchange
+    ) public {
+        require(images[cidToExchange].canBeExchanged, "Owner's image is not exchangeable.");
+        require(images[cidForExchange].canBeExchanged, "Exchanger's image is not exchangeable.");
+
+        exchangeRequests[ownerLogin].push(ExchangeRequest({
+            ownerLogin: ownerLogin,
+            exchangerLogin: exchangerLogin,
+            imageHashToExchange: cidToExchange,
+            imageHashForExchange: cidForExchange
+        }));
+    }
+
+   function cancelExchangeRequest(
+        string memory ownerLogin,
+        string memory exchangerLogin,
+        string memory cidToExchange,
+        string memory cidForExchange
+    ) public {
+        ExchangeRequest[] storage requests = exchangeRequests[ownerLogin];
+        bool requestFound = false;
+
+        for (uint256 i = 0; i < requests.length; i++) {
+            if (
+                keccak256(abi.encodePacked(requests[i].exchangerLogin)) == keccak256(abi.encodePacked(exchangerLogin)) &&
+                keccak256(abi.encodePacked(requests[i].imageHashToExchange)) == keccak256(abi.encodePacked(cidToExchange)) &&
+                keccak256(abi.encodePacked(requests[i].imageHashForExchange)) == keccak256(abi.encodePacked(cidForExchange))
+            ) {
+                requestFound = true;
+
+                for (uint256 j = i; j < requests.length - 1; j++) {
+                    requests[j] = requests[j + 1];
+                }
+                requests.pop();
+                break;
+            }
+        }
+
+        require(requestFound, "Exchange request not found.");
     }
 }

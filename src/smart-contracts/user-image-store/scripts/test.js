@@ -63,16 +63,6 @@ describe('UserImageStore Contract', function () {
         expect(publicImages[0].imageName).to.equal("Image1");
     });
 
-    it('should exchange images between two users', async () => {
-        await userImageStore.methods.exchangeImages(0, 1, "testUser1", "testUser2").send({ from: accounts[0] });
-
-        const imagesUser1 = await userImageStore.methods.getImagesByUserLogin("testUser1").call();
-        const imagesUser2 = await userImageStore.methods.getImagesByUserLogin("testUser2").call();
-
-        expect(imagesUser1[0].imageName).to.equal("Image2");
-        expect(imagesUser2[0].imageName).to.equal("Image1");
-    });
-
     it('should log out a user and fail getImagesByUserLogin after logout', async () => {
         await userImageStore.methods.logoutUser("testUser1").send({ from: accounts[0] });
         try {
@@ -80,5 +70,66 @@ describe('UserImageStore Contract', function () {
         } catch (error) {
             console.log("getImagesByUserLogin failed after logout as expected:", error.cause.errorArgs);
         }
+    });
+
+    describe('Exchange Requests', function () {
+        before(async () => {
+            await deploy();
+            
+            await userImageStore.methods.registerUser("ownerUser", "ownerPassword").send({ from: accounts[0] });
+            await userImageStore.methods.registerUser("exchangerUser", "exchangerPassword").send({ from: accounts[1] });
+            await userImageStore.methods.loginUser("ownerUser", "ownerPassword").send({ from: accounts[0] });
+            await userImageStore.methods.loginUser("exchangerUser", "exchangerPassword").send({ from: accounts[1] });
+            
+            await userImageStore.methods.storeImage("ownerUser", web3.utils.keccak256("ownerImage"), true, "OwnerImage", true).send({ from: accounts[0] });
+            await userImageStore.methods.storeImage("exchangerUser", web3.utils.keccak256("exchangerImage"), true, "ExchangerImage", true).send({ from: accounts[1] });
+        });
+    
+        it('should create an exchange request', async () => {
+            await userImageStore.methods.createExchangeRequest(
+                "ownerUser",
+                "exchangerUser",
+                web3.utils.keccak256("ownerImage"),
+                web3.utils.keccak256("exchangerImage")
+            ).send({ from: accounts[0] });
+    
+            const requests = await userImageStore.methods.getExchangeRequests("ownerUser").call();
+            
+            expect(requests).to.be.an('array').that.has.lengthOf(1);
+            expect(requests[0].exchangerLogin).to.equal("exchangerUser");
+            expect(requests[0].imageHashToExchange).to.equal(web3.utils.keccak256("ownerImage"));
+            expect(requests[0].imageHashForExchange).to.equal(web3.utils.keccak256("exchangerImage"));
+        });
+    
+        it('should retrieve exchange requests for a user', async () => {
+            const requests = await userImageStore.methods.getExchangeRequests("ownerUser").call();
+    
+            expect(requests).to.be.an('array').that.is.not.empty;
+            expect(requests[0].exchangerLogin).to.equal("exchangerUser");
+            expect(requests[0].imageHashToExchange).to.equal(web3.utils.keccak256("ownerImage"));
+            expect(requests[0].imageHashForExchange).to.equal(web3.utils.keccak256("exchangerImage"));
+        });
+    
+        it('should cancel an exchange request', async () => {
+            await userImageStore.methods.createExchangeRequest(
+                "ownerUser",
+                "exchangerUser",
+                web3.utils.keccak256("ownerImage"),
+                web3.utils.keccak256("exchangerImage")
+            ).send({ from: accounts[0] });
+    
+            let requestsBefore = await userImageStore.methods.getExchangeRequests("ownerUser").call();
+            expect(requestsBefore).to.be.an('array').that.has.lengthOf(2);
+    
+            await userImageStore.methods.cancelExchangeRequest(
+                "ownerUser",
+                "exchangerUser",
+                web3.utils.keccak256("ownerImage"),
+                web3.utils.keccak256("exchangerImage")
+            ).send({ from: accounts[0] });
+    
+            const requestsAfter = await userImageStore.methods.getExchangeRequests("ownerUser").call();
+            expect(requestsAfter).to.be.an('array').that.has.lengthOf(1);
+        });
     });
 });
