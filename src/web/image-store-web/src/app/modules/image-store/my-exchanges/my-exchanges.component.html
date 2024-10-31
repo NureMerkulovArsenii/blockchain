@@ -1,0 +1,26 @@
+<mat-card *ngFor="let exchange of exchangeRequests" class="exchange-card">
+    <mat-card-content>
+        <div class="image-container row">
+            <div class="col-6 d-flex flex-column justify-content-space-between">
+                <img mat-card-image [src]="exchange.image1" alt="Image 1">
+                <p class="align-text-center">{{exchange.ownerLogin}}</p>
+            </div>
+            <div class="col-6 d-flex flex-column justify-content-space-between">
+                <img mat-card-image [src]="exchange.image2" alt="Image 2">
+                <p class="align-text-center">{{exchange.exchangerLogin}}</p>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions [align]="'end'" class="d-flex gap-2">
+        <button mat-raised-button color="warn" (click)="rejectExchange(exchange)">Reject</button>
+        <button mat-raised-button color="primary" (click)="acceptExchange(exchange)">Accept</button>
+    </mat-card-actions>
+</mat-card>
+
+<style>
+    .exchange-card {
+        margin: 10px;
+        width: 40%;
+    }
+    
+</style>

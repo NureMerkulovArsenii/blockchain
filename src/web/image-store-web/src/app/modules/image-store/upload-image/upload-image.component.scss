@@ -1,0 +1,35 @@
+.upload-drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .drag-hover {
+    border-color: #1976d2;
+    background-color: rgba(25, 118, 210, 0.1);
+  }
+  
+  .placeholder {
+    color: #888;
+    font-size: 1rem;
+  }
+  
+  .hidden-file-input {
+    display: none;
+  }
+  
+  .preview-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+  
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  

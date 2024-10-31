@@ -14,6 +14,11 @@ import { MyImagesComponent } from './my-images/my-images.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ExchangeModalComponent } from './exchange-modal/exchange-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MyExchangesComponent } from './my-exchanges/my-exchanges.component';
+
 
 
 
@@ -24,7 +29,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     PublicImagesComponent,
     UploadImageComponent,
     MyImagesComponent,
-    ExchangeModalComponent
+    ExchangeModalComponent,
+    MyExchangesComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +41,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatTabsModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatInputModule
   ]
 })
 export class ImageStoreModule { }

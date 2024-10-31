@@ -1,15 +1,10 @@
 .image-list {
     padding: 20px;
+    height: 100%;
   }
   
   .image-list h2 {
     margin-bottom: 15px;
-  }
-  
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px; /* Space between items */
   }
   
   .image-list-item {

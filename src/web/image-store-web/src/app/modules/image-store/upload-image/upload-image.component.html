@@ -1,52 +1,34 @@
-<div class="col-md-6">
-    <div class="row image-container">
-      <form *ngIf="uploadImageForm" [formGroup]="uploadImageForm" (ngSubmit)="uploadImage()">
-        
-        <div class="mb-3">
-          <label for="image" class="form-label">Image</label>
-          <input 
-            #imageFileInput
-            type="file" 
-            name="file" 
-            class="form-control" 
-            id="image" 
-            (change)="onImageFileChange($event)"
-          />
-        </div>
-  
-        <div class="mb-3">
-          <label for="imageName" class="form-label">ImageName</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="imageName" 
-            formControlName="imageName" 
-            placeholder="Enter image name"
-          />
-        </div>
-  
-        <div class="mb-3">
-          <label>
-            <input type="checkbox" formControlName="visiblePublicly" />
-            Is visible publicly
-          </label>
-        </div>
-  
-        <div class="mb-3">
-          <label>
-            <input type="checkbox" formControlName="canBeExchanged" />
-            Can be exchanged
-          </label>
-        </div>
-  
-        <div class="mb-3">
-          <button type="submit" class="btn btn-primary">Upload image</button>
-        </div>
-      </form>
-  
-      <div *ngIf="uploadedImageUrl">
-        <img [src]="uploadedImageUrl" width="300" height="300" alt="Uploaded Image">
+<h1 mat-dialog-title>Upload Image</h1>
+<div mat-dialog-content>
+  <form [formGroup]="uploadImageForm" (ngSubmit)="uploadImage()">
+    <div cdkDropList (cdkDropListDropped)="onImageDrop($event)" class="upload-drop-zone"
+      [ngClass]="{'drag-hover': isDragOver}" (cdkDragEnter)="isDragOver = true" (cdkDragExit)="isDragOver = false">
+
+      <input #imageFileInput type="file" name="file" class="form-control hidden-file-input"
+        (change)="onImageFileChange($event)" (click)="$event.stopPropagation()" />
+
+      <div *ngIf="!uploadedImageUrl" class="placeholder" (click)="imageFileInput.click()">
+        Drag and drop an image or click to select a file
+      </div>
+
+      <img *ngIf="uploadedImageUrl" [src]="uploadedImageUrl" alt="Uploaded Image" class="preview-image" />
+    </div>
+
+    <div class="form-fields mt-4">
+      <mat-form-field appearance="fill">
+        <mat-label>Image Name</mat-label>
+        <input matInput type="text" id="imageName" formControlName="imageName" placeholder="Enter image name" />
+      </mat-form-field>
+
+      <div class="checkbox-group">
+        <mat-checkbox formControlName="visiblePublicly">Is visible publicly</mat-checkbox>
+        <mat-checkbox formControlName="canBeExchanged">Can be exchanged</mat-checkbox>
       </div>
     </div>
-  </div>
-  
+  </form>
+</div>
+
+<div mat-dialog-actions [align]="'end'">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="uploadImage()">Upload Image</button>
+</div>

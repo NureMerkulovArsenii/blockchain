@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ImageListItem } from '../models/image-list-item.model';
 import { ImageService } from 'src/app/core/services/image.service';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./image-list.component.scss']
 })
 export class ImageListComponent implements OnInit {
+  
   images!: Observable<ImageListItem[]>; // Input property to receive the list of images
 
   constructor(private imageService: ImageService) {
@@ -17,4 +18,5 @@ export class ImageListComponent implements OnInit {
   ngOnInit(): void {
     this.images = this.imageService.getAllPublicImages();
   }
+
 }

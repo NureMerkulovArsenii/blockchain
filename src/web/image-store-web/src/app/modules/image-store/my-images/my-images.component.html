@@ -1,7 +1,12 @@
 <div class="image-list">
     <h2>Image List</h2>
-    <div class="row">
-        <app-image-list-item *ngFor="let image of images | async" [imageItem]="image">
+    <div class="d-flex flex-wrap gap-4">
+        <app-image-list-item *ngFor="let image of images | async" [imageItem]="image" [canExchange]="false" (imageSelected)="onImageSelected($event)">
         </app-image-list-item>
     </div>
 </div>
+
+<button mat-raised-button color="primary" class="add-button" (click)="uploadImage()">
+    <mat-icon>add</mat-icon>
+    Upload
+</button>

@@ -11,11 +11,22 @@ import { ImageService } from 'src/app/core/services/image.service';
 export class PublicImagesComponent implements OnInit {
 
   images!: Observable<ImageListItem[]>;
+  activeTabIndex: number = 0;
+
 
   constructor(private imageService: ImageService) { }
 
   ngOnInit(): void {
     this.images = this.imageService.getAllPublicImages();
+    const savedTabIndex = localStorage.getItem('activeTabIndex');
+    if (savedTabIndex !== null) {
+      this.activeTabIndex = +savedTabIndex;
+    }
+  }
+
+  onTabChange(event: any): void {
+    this.activeTabIndex = event.index;
+    localStorage.setItem('activeTabIndex', this.activeTabIndex.toString());
   }
 
 }

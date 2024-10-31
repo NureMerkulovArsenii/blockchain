@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ImageListItem } from 'src/app/modules/image-store/models/image-list-item.model';
 import { environment } from 'src/environment/environment';
 import { UploadImageRequest } from '../models/upload-image.model';
+import { IpfsFile } from '../models/ipfs-file.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,8 @@ export class ImageService {
     return this.httpClient.post(this.baseUrl + '/upload', image);
   }
 
+  getImage(imageId: string) : Observable<IpfsFile> {
+    return this.httpClient.get<IpfsFile>(this.baseUrl + '/get/' + imageId);
+  }
 
 }

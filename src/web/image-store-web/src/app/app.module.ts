@@ -68,7 +68,7 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    AccountModule,
+    AccountModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BearerTokenInterceptor, multi: true },

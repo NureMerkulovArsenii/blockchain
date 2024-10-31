@@ -1,4 +1,4 @@
-<mat-card class="image-list-item">
+<mat-card class="image-list-item" (click)="onCardClick(imageItem)">
     <mat-card-header>
         <mat-card-title>{{imageItem.imageName}}</mat-card-title>
         <mat-card-subtitle>{{imageItem.imageCid.length > 10 ? (imageItem.imageCid | slice:0:10) + '...' : imageItem.imageCid}}</mat-card-subtitle>
@@ -10,7 +10,7 @@
         <img mat-card-image [src]="uploadedImageUrl" alt="{{ imageItem.imageName }}" width="150">
     </mat-card-content>
     <mat-card-actions>
-        <button mat-button (click)="requestExchange(imageItem.imageCid)" *ngIf="imageItem.canBeExchanged">
+        <button mat-button (click)="requestExchange(imageItem.imageCid)" *ngIf="canExchange && imageItem.canBeExchanged">
             <mat-icon>sync</mat-icon>
             Request Exchange</button>
     </mat-card-actions>

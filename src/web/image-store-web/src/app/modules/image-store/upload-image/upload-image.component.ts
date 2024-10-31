@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { UploadImageRequest } from 'src/app/core/models/upload-image.model';
 import { ImageService } from 'src/app/core/services/image.service';
+import { DialogData } from '../models/dialog-data.model';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-image',
@@ -14,19 +16,24 @@ export class UploadImageComponent implements OnInit {
   uploadImageForm!: FormGroup;
   uploadedImageUrl: string | ArrayBuffer | null = null;
 
+  isDragOver = false;
+
   constructor(
+    public dialogRef: MatDialogRef<UploadImageComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData<null, null>,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private sanitizer: DomSanitizer
 
   ) { }
 
   ngOnInit(): void {
     this.uploadImageForm = this.formBuilder.group({
       file: [null, Validators.required],
-      visiblePublicly: [true],
-      canBeExchanged: [false],
-      imageName: [''] // You can set a default or use an input to get this
+      visiblePublicly: [''],
+      canBeExchanged: [''],
+      imageName: ['']
     });
   }
 
@@ -42,20 +49,40 @@ export class UploadImageComponent implements OnInit {
     }
 
     reader.onload = () => {
-      this.uploadedImageUrl = reader.result; // Display the image
+      this.uploadedImageUrl = reader.result;
     };
    
   }
 
-  uploadImage(): void {
-    // const uploadModel: UploadImageRequest = {
-    //   isVisiblePublicly: this.uploadImageForm.value.visiblePublicly,
-    //   isForExchange: this.uploadImageForm.value.canBeExchanged,
-    //   fileName: this.uploadImageForm.value.imageName,
-    //   file: this.uploadedImageUrl
-    // };
+  // onImageFileChange(event: Event): void {
+  //   const file = (event.target as HTMLInputElement).files?.[0];
+  //   this.processFile(file!);
+  // }
 
-    //send this as formdata
+  onImageDrop(event: any): void {
+    this.isDragOver = false;
+    const file = event.item?.getInput('file')?.files?.[0];
+    if (file) {
+      this.processFile(file);
+    }
+  }
+
+  private processFile(file: File | null): void {
+    if (file) {
+      this.uploadImageForm.patchValue({ file: file });
+
+      const reader = new FileReader();
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+  
+      reader.onload = () => {
+        this.uploadedImageUrl = reader.result;
+      };
+    }
+  }
+
+  uploadImage(): void {
     const uploadModel = new FormData();
     uploadModel.append('file', this.uploadImageForm.value.file);
     uploadModel.append('isVisiblePublicly', this.uploadImageForm.value.visiblePublicly);
@@ -68,13 +95,9 @@ export class UploadImageComponent implements OnInit {
 
     this.imageService.uploadImage(uploadModel).subscribe({
       next: (result: any) => {
-        this.uploadedImageUrl = result.data; // Assume result.data contains the URL of the uploaded image
-      },
-      error: () => {
-        this.toastr.error();
-      },
-      complete: () => {
+        console.log(result);
         this.toastr.success();
+        this.dialogRef.close();
       }
     });
   }
