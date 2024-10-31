@@ -16,16 +16,19 @@ router.get("/my", authUser, async (req: Request, res: Response) => {
 router.post("/create", authUser, async (req: Request, res: Response) => {
     const requestModel = req.body;
     createExchangeRequestHandle(requestModel);
+    res.status(200).send("Exchange request created successfully");
 });
 
 router.post("/cancel", authUser, async (req: Request, res: Response) => {
     const requestModel = req.body;
     cancelExchangeRequestHandle(requestModel);
+    res.status(200).send("Exchange request cancelled successfully");
 });
 
 router.post('/accept', authUser, async (req: Request, res: Response) => {
     const requestModel = req.body;
     acceptExchangeRequestHandle(requestModel);
+    res.status(200).send("Exchange request accepted successfully");
 });
 
 

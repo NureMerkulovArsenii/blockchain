@@ -23,28 +23,16 @@ export class IpfsClient {
         });
     }
 
-    // async uploadFile(filePath: string): Promise<string> {
-    //     const file = readFileSync(filePath);
-    //     const formData = new FormData();
-    //     const blob = new Blob([file], { type: 'application/octet-stream' });
-    //     formData.append('arg', blob);
+    async getIpfsFile(cid: string): Promise<IpfsFile> {
+        const response = await this.ipfsClient.get(`/${cid}`, {
+            responseType: 'arraybuffer'
+        });
 
-    //     const response = await this.client.post('/add', formData);
+        const buffer = Buffer.from(response.data);
+        const file = buffer.toString('base64');
 
-    //     return response.data.Hash;
-    // }
-
-    // async downloadFile(cid: string, outputPath: string): Promise<void> {
-
-    //     const response = await this.ipfsClient.get(`/${cid}`, {
-    //         responseType: 'arraybuffer'
-    //     });
-
-    //     const buffer = Buffer.from(response.data);
-
-    //     writeFileSync(outputPath, buffer);
-
-    // }
+        return { cid, file };
+    }
 
     async uploadFile(buffer: Buffer): Promise<string> {
         const formData = new FormData();
@@ -73,10 +61,11 @@ export class IpfsClient {
                 responseType: 'arraybuffer'
             });
             const buffer = Buffer.from(response.data);
-            files.push({ cid, buffer });
+            const file: string = buffer.toString('base64');
+            files.push({ cid, file });
         }
 
-        return files;        
+        return files;
     }
 
 }

@@ -1,4 +1,4 @@
 export interface IpfsFile {
     cid: string;
-    buffer: Buffer;
+    file: string;
 }

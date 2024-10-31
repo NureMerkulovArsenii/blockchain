@@ -23,7 +23,7 @@ async function deployContract() {
     accounts = await web3.eth.getAccounts();
     userImageStore = await new web3.eth.Contract(abi)
         .deploy({ data: bytecode })
-        .send({ from: accounts[0], gas: 5000000 });
+        .send({ from: accounts[0], gas: 30000000 });
 }
 
 //#region auth
@@ -78,6 +78,7 @@ export async function storeImage(
 export async function getImagesByUserLogin(userLogin: string): Promise<Image[]> {
     try {
         const images = await contract.methods.getImagesByUserLogin(userLogin).call();
+        console.log(images);
         return images;
     } catch (error) {
         console.error(error);
@@ -98,7 +99,9 @@ export async function getImages(): Promise<Image[]> {
 
 export async function getExchangeRequests(userLogin: string): Promise<ExchangeRequest[]> {
     try {
-        const exchangeRequests = await contract.methods.getExchangeRequests(userLogin).call();
+        const exchangeRequests = await contract.methods.getExchangeRequests(userLogin)
+            .call({ from: fromAddress });;
+        console.log(exchangeRequests);
         return exchangeRequests;
     } catch (error) {
         console.error(error);
@@ -108,7 +111,8 @@ export async function getExchangeRequests(userLogin: string): Promise<ExchangeRe
 
 export async function exchangeImages(model: ExchangeRequest) {
     try {
-        await contract.methods.exchangeImages(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange);
+        await contract.methods.exchangeImages(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange)
+            .send({ from: fromAddress });
         return true;
     } catch (error) {
         console.error(error);
@@ -118,7 +122,8 @@ export async function exchangeImages(model: ExchangeRequest) {
 
 export async function cancelExchangeRequest(model: ExchangeRequest) {
     try {
-        await contract.methods.cancelExchangeRequest(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange);
+        await contract.methods.cancelExchangeRequest(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange)
+            .send({ from: fromAddress });
         return true;
     } catch (error) {
         console.error(error);
@@ -127,8 +132,9 @@ export async function cancelExchangeRequest(model: ExchangeRequest) {
 }
 
 export async function createExchangeRequest(model: ExchangeRequest) {
-    try {
-        await contract.methods.createExchangeRequest(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange);
+    try {        
+        await contract.methods.createExchangeRequest(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange)
+            .send({ from: fromAddress });
         return true;
     } catch (error) {
         console.error(error);

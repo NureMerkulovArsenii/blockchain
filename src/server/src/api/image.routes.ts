@@ -4,6 +4,7 @@ import { uploadImage } from '../handlers/image/upload.handler';
 import { getAllImages } from '../handlers/image/get-all-images.handler';
 import fileUpload from 'express-fileupload';
 import { getUserImages } from '../handlers/image/get-my-images.handler';
+import { getImageByIdHandle } from '../handlers/image/get-image-by-id.handler';
 
 
 const router = express.Router();
@@ -18,6 +19,14 @@ router.get("/my-images", authUser, async (req: Request, res: Response) => {
     const username = getUserName(req);
     const images = await getUserImages(username);
     res.json(images);    
+});
+
+router.get("/get/:cid", async (req: Request, res: Response) => {
+    const cid = req.params.cid;
+    const file = await getImageByIdHandle(cid);
+
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.send(file);
 });
 
 router.post("/upload", authUser, async (req: Request, res: Response) => {

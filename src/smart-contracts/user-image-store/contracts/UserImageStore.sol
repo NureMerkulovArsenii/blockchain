@@ -82,17 +82,11 @@ contract UserImageStore is ERC721, Ownable {
     }
 
     function exchangeImages(
-        string memory ciIdToSuggest,
-        string memory ciToExchange,
         string memory ownerLogin,
-        string memory exchangerLogin
+        string memory exchangerLogin,
+        string memory ciIdToSuggest,
+        string memory ciToExchange
     ) public {
-        User storage owner = users[ownerLogin];
-        User storage exchanger = users[exchangerLogin];
-        
-        require(owner.isLoggedIn, "Owner must be logged in.");
-        require(exchanger.isLoggedIn, "Exchanger must be logged in.");
-
         Image storage imageToSuggest = images[ciIdToSuggest];
         Image storage imageToExchange = images[ciToExchange];
 

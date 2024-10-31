@@ -18,7 +18,7 @@ export async function getUserImages(username: string): Promise<ImageResponse[]> 
             canBeExchanged: image.canBeExchanged,
             username: image.userLogin,
             imageName: image.imageName,
-            image: files.find(file => file.cid === image.imageHash)!.buffer.toString("base64"),
+            image: files.find(file => file.cid === image.imageHash)!.file,
             imageCid: image.imageHash
         };
     });
