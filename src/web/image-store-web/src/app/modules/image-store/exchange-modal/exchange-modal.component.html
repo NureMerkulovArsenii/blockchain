@@ -1,21 +1,27 @@
-<h2 mat-dialog-title>Install Angular</h2>
+<h2 mat-dialog-title>Create exchange</h2>
 <mat-dialog-content class="mat-typography" id="dialog-content">
   <div class="row">
-    <div class="col-6">
-      <img mat-card-image [src]="uploadedImageUrl" alt="{{ data.data?.imageName }}" width="300">
+    <div class="col-6 d-flex flex-column align-items-center p-1">
+      <div>{{data.data?.imageName}}</div>
+      <div>{{data.data?.username}}</div>
+      <img mat-card-image [src]="uploadedImageUrl" alt="{{ data.data?.imageName }}" class="w-100">
     </div>
-    <div class="col-6">
-      <ng-container *ngIf="imageToExchangeUrl == undefined">
+    <div class="col-6 d-flex flex-column align-items-center p-1">
+      <ng-container *ngIf="imageToExchangeUrl == undefined" class="w-100">
         <app-my-images (imageSelected)="onImageSelected($event)"></app-my-images>
       </ng-container>
       <ng-container *ngIf="imageToExchangeUrl != undefined">
-        <img mat-card-image [src]="imageToExchangeUrl" alt="{{ data.data }}" width="300">
-        <button mat-button (click)="selectImage()">Select Image</button>
+        <div>{{data.data?.imageName}}</div>
+        <div>{{data.data?.username}}</div>
+        <div class="image-container w-100">
+          <img mat-card-image [src]="imageToExchangeUrl" alt="{{ data.data }}" class="w-100">
+          <button (click)="selectImage()" class="close-button"><mat-icon>close</mat-icon></button>
+        </div>
       </ng-container>
     </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions [align]="'end'">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button (click)="requestExchange()" cdkFocusInitial>Exchange</button>
+  <button mat-raised-button color="primary" (click)="requestExchange()" cdkFocusInitial>Exchange</button>
 </mat-dialog-actions>

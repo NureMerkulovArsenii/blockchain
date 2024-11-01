@@ -14,21 +14,37 @@ router.get("/my", authUser, async (req: Request, res: Response) => {
 });
 
 router.post("/create", authUser, async (req: Request, res: Response) => {
-    const requestModel = req.body;
-    createExchangeRequestHandle(requestModel);
-    res.status(200).send("Exchange request created successfully");
+    try {
+
+        const requestModel = req.body;
+        createExchangeRequestHandle(requestModel);
+        res.status(200).json({ message: "Exchange request created successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error creating exchange request" });
+    }
 });
 
 router.post("/cancel", authUser, async (req: Request, res: Response) => {
-    const requestModel = req.body;
-    cancelExchangeRequestHandle(requestModel);
-    res.status(200).send("Exchange request cancelled successfully");
+    try {
+        const requestModel = req.body;
+        cancelExchangeRequestHandle(requestModel);
+        res.status(200).json({ message: "Exchange request cancelled successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error cancelling exchange request" });
+    }
 });
 
 router.post('/accept', authUser, async (req: Request, res: Response) => {
-    const requestModel = req.body;
-    acceptExchangeRequestHandle(requestModel);
-    res.status(200).send("Exchange request accepted successfully");
+    try {
+        const requestModel = req.body;
+        acceptExchangeRequestHandle(requestModel);
+        res.status(200).json({ message: "Exchange request accepted successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error accepting exchange request" });
+    }
 });
 
 export default router;

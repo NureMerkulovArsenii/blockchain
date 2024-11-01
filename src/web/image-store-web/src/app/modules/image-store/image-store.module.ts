@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MyExchangesComponent } from './my-exchanges/my-exchanges.component';
+import { EditImageComponent } from './edit-image/edit-image.component';
 
 
 
@@ -30,7 +31,8 @@ import { MyExchangesComponent } from './my-exchanges/my-exchanges.component';
     UploadImageComponent,
     MyImagesComponent,
     ExchangeModalComponent,
-    MyExchangesComponent
+    MyExchangesComponent,
+    EditImageComponent
   ],
   imports: [
     CommonModule,

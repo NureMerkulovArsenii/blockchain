@@ -61,7 +61,7 @@ export class LoginPageComponent implements OnInit {
       this.accountService.login(loginModel).subscribe({
         next: (response: BaseResponseModel<AuthResponseModel>) => {
           if (response.isSuccess) {
-            console.log(response.data);
+            localStorage.setItem("username", username ?? "");
             localStorage.setItem("access_token", response.data?.accessToken ?? "");
             window.location.reload();
           }
@@ -84,8 +84,7 @@ export class LoginPageComponent implements OnInit {
       this.accountService.register(loginModel).subscribe({
         next: (response: BaseResponseModel<AuthResponseModel>) => {
           if (response.isSuccess) {
-            localStorage.setItem("access_token", response.data?.accessToken ?? "");
-            window.location.reload();
+            this.toastr.success('User registered successfully', 'Success');
           }
         },
         error: (error) => {

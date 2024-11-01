@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Edit image info</h1>
+<div mat-dialog-content>
+    <form [formGroup]="editImageForm">
+        <div class="checkbox-group">
+            <mat-checkbox formControlName="visiblePublicly">Is visible publicly</mat-checkbox>
+            <mat-checkbox formControlName="canBeExchanged">Can be exchanged</mat-checkbox>
+        </div>
+    </form>
+</div>
+
+<div mat-dialog-actions [align]="'end'">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" (click)="updateImage()">Update</button>
+</div>

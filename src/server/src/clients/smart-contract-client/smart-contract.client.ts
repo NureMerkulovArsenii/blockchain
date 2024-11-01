@@ -67,7 +67,7 @@ export async function storeImage(
     canBeExchanged: boolean
 ): Promise<boolean> {
     try {
-        await contract.methods.storeImage(userLogin, imageHash, Boolean(visiblePublicly), imageName, Boolean(canBeExchanged)).send({ from: fromAddress });
+        await contract.methods.storeImage(userLogin, imageHash, visiblePublicly, imageName, canBeExchanged).send({ from: fromAddress });
         return true;
     } catch (error) {
         console.error(error);
@@ -82,7 +82,7 @@ export async function updateImage(
     canBeExchanged: boolean
 ): Promise<boolean> {
     try {
-        await contract.methods.updateImage(userLogin, imageHash, Boolean(visiblePublicly), Boolean(canBeExchanged)).send({ from: fromAddress });
+        await contract.methods.updateImage(userLogin, imageHash, visiblePublicly, canBeExchanged).send({ from: fromAddress });
         return true;
     } catch (error) {
         console.error(error);
@@ -112,6 +112,10 @@ export async function getImages(): Promise<Image[]> {
     }
 }
 
+//#endregion
+
+
+//#region exchange
 export async function getExchangeRequests(userLogin: string): Promise<ExchangeRequest[]> {
     try {
         const exchangeRequests = await contract.methods.getExchangeRequests(userLogin)

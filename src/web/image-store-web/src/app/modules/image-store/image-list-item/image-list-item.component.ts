@@ -5,6 +5,7 @@ import { ImageHelper } from 'src/app/core/helpers/image.helper';
 import { MatDialog } from '@angular/material/dialog';
 import { ExchangeModalComponent } from '../exchange-modal/exchange-modal.component';
 import { DialogData } from '../models/dialog-data.model';
+import { EditImageComponent } from '../edit-image/edit-image.component';
 
 @Component({
   selector: 'app-image-list-item',
@@ -16,8 +17,9 @@ export class ImageListItemComponent {
   @Output() imageSelected = new EventEmitter<ImageListItem>();
 
   @Input() imageItem!: ImageListItem;
+  @Input() canExchange: boolean = true;
+  @Input() isMyImage: boolean = false;
 
-  @Input() canExchange: boolean = true;;
   uploadedImageUrl!: SafeUrl;
 
   constructor(
@@ -40,7 +42,18 @@ export class ImageListItemComponent {
     });
   }
 
-  copyToClipboard(cid:string): void {
+  editImage(): void {
+    const dialogRef = this.dialog.open(EditImageComponent, {
+      data: {data: this.imageItem, isEdit: true} as DialogData<ImageListItem, null>,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.imageItem.canBeExchanged = result.canBeExchanged;
+        this.imageItem.visiblePublicly = result.visiblePublicly;        
+      }
+      
+    });
   }
 
   onCardClick(imageItem: ImageListItem): void {

@@ -1,7 +1,7 @@
 <div class="image-list">
-    <h2>Image List</h2>
     <div class="d-flex flex-wrap gap-4">
-        <app-image-list-item *ngFor="let image of images | async" [imageItem]="image" [canExchange]="false" (imageSelected)="onImageSelected($event)">
+        <app-image-list-item *ngFor="let image of images | async" [imageItem]="image"
+                [canExchange]="false" [isMyImage]="true" (imageSelected)="onImageSelected($event)">
         </app-image-list-item>
     </div>
 </div>

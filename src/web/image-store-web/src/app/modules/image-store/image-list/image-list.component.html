@@ -1,7 +1,6 @@
 <div class="image-list">
-    <h2>Image List</h2>
     <div class="d-flex flex-wrap gap-4 mh-100">
-        <app-image-list-item *ngFor="let image of images | async" [imageItem]="image" >
+        <app-image-list-item *ngFor="let image of images | async" [imageItem]="image" [isMyImage]="userName == image.username"  >
         </app-image-list-item>
     </div>
 </div>

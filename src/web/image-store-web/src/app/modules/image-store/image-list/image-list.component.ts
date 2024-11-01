@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./image-list.component.scss']
 })
 export class ImageListComponent implements OnInit {
+
+  userName: string | null = null;
   
   images!: Observable<ImageListItem[]>;
 
@@ -16,6 +18,7 @@ export class ImageListComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.userName = localStorage.getItem('username');
     this.images = this.imageService.getAllPublicImages();
   }
 }

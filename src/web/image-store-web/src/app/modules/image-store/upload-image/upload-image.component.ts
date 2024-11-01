@@ -80,10 +80,13 @@ export class UploadImageComponent implements OnInit {
     uploadModel.append('fileName', this.uploadImageForm.value.imageName);
 
     this.imageService.uploadImage(uploadModel).subscribe({
-      next: (result: any) => {
-        console.log(result);
-        this.toastr.success();
+      next: (response) => {
+        this.toastr.success(response.message);
         this.dialogRef.close();
+      },
+      error: (error) => {
+        console.log(error);
+        this.toastr.error('Error uploading image');
       }
     });
   }

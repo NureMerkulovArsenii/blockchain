@@ -13,9 +13,6 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   constructor() { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
-    console.log('BearerTokenInterceptor');
-
     const accessToken = localStorage.getItem('access_token');
     if (accessToken) {
       request = request.clone({

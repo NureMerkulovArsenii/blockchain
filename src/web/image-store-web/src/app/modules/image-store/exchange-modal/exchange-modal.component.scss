@@ -1,5 +1,25 @@
 #dialog-content {
     width: 900px;
     height: 400px;
-    
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+
+    img {
+        display: block;
+    }
+
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: red; /* or any color you prefer */
 }

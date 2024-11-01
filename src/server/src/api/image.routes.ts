@@ -17,7 +17,7 @@ router.get("/get-all", authUser, async (req: Request, res: Response) => {
 router.get("/my-images", authUser, async (req: Request, res: Response) => {
     const username = getUserName(req);
     const images = await getUserImages(username);
-    res.json(images);    
+    res.json(images);
 });
 
 router.get("/get/:cid", async (req: Request, res: Response) => {
@@ -29,21 +29,26 @@ router.get("/get/:cid", async (req: Request, res: Response) => {
 });
 
 router.post("/upload", authUser, async (req: Request, res: Response) => {
-    const file = req.files!.file as fileUpload.UploadedFile;
-
-    const username = getUserName(req);
-    await uploadImage(file.data, req.body, username);
-
-    res.status(200).send("Image uploaded successfully");
-
+    try {
+        const file = req.files!.file as fileUpload.UploadedFile;
+        const username = getUserName(req);
+        await uploadImage(file.data, req.body, username);
+        res.status(200).json({ message: "Image uploaded successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error uploading image" });
+    }
 });
 
-router.post("/update", authUser, async (req: Request, res: Response) => {
-    const username = getUserName(req);
-    await updateImageHandle(req.body, username);
-
-    res.status(200).send("Image uploaded successfully");
-
+router.patch("/update", authUser, async (req: Request, res: Response) => {
+    try {
+        const username = getUserName(req);
+        await updateImageHandle(req.body, username);
+        res.status(200).json({ message: "Image info updated successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating image info" });
+    }
 });
 
 

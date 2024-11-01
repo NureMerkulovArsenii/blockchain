@@ -1,16 +1,17 @@
 <mat-card class="image-list-item" (click)="onCardClick(imageItem)">
-    <mat-card-header>
-        <mat-card-title>{{imageItem.imageName}}</mat-card-title>
-        <mat-card-subtitle>{{imageItem.imageCid.length > 10 ? (imageItem.imageCid | slice:0:10) + '...' : imageItem.imageCid}}</mat-card-subtitle>
-        <button mat-icon-button (click)="copyToClipboard(imageItem.imageCid)" width="10" height="10">
-            <mat-icon width="10" height="10">content_copy</mat-icon>
+    <mat-card-header class="d-flex align-items-center justify-content-center">
+        <mat-card-title class="text-center">{{imageItem.imageName}}</mat-card-title>
+        <mat-card-subtitle class="text-center">{{imageItem.username}}</mat-card-subtitle>
+        <button mat-icon-button (click)="editImage()" class="float-end" *ngIf="isMyImage">
+            <mat-icon>edit</mat-icon>
         </button>
     </mat-card-header>
     <mat-card-content>
         <img mat-card-image [src]="uploadedImageUrl" alt="{{ imageItem.imageName }}" width="150">
     </mat-card-content>
     <mat-card-actions>
-        <button mat-button (click)="requestExchange(imageItem.imageCid)" *ngIf="canExchange && imageItem.canBeExchanged">
+        <button mat-button (click)="requestExchange(imageItem.imageCid)"
+            *ngIf="!isMyImage && canExchange && imageItem.canBeExchanged">
             <mat-icon>sync</mat-icon>
             Request Exchange</button>
     </mat-card-actions>

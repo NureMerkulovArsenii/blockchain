@@ -44,7 +44,6 @@ contract UserImageStore is ERC721, Ownable {
 
     function loginUser(string memory userLogin, string memory password) public {
         User storage user = users[userLogin];
-        require(!user.isLoggedIn, "User is already logged in.");
         require(keccak256(abi.encodePacked(userLogin)) == keccak256(abi.encodePacked(user.login)), "Incorrect login.");
         require(keccak256(abi.encodePacked(password)) == user.passwordHash, "Incorrect password.");
 
