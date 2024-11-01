@@ -31,7 +31,4 @@ router.post('/accept', authUser, async (req: Request, res: Response) => {
     res.status(200).send("Exchange request accepted successfully");
 });
 
-
-
-
 export default router;

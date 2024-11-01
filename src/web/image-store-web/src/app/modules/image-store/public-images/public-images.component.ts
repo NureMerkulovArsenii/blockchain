@@ -13,7 +13,6 @@ export class PublicImagesComponent implements OnInit {
   images!: Observable<ImageListItem[]>;
   activeTabIndex: number = 0;
 
-
   constructor(private imageService: ImageService) { }
 
   ngOnInit(): void {

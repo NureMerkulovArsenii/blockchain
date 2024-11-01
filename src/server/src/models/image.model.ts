@@ -1,4 +1,3 @@
-
 export interface Image {
     userLogin: string;
     imageHash: string;

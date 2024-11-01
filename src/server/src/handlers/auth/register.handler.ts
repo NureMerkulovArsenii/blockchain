@@ -6,9 +6,6 @@ import { AuthResponseModel } from "../../models/response/auth-reponse.model";
 
 
 export async function register(model: AuthRequestModel): Promise<BaseResponseModel<AuthResponseModel>> {
-
-    console.log(model);
-
     const authResult = await registerUser(model.username, model.password);
     if(!authResult){
         return {
@@ -29,5 +26,4 @@ export async function register(model: AuthRequestModel): Promise<BaseResponseMod
     }
 
     return res;
-    
 }

@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ImageService } from 'src/app/core/services/image.service';
 import { DialogData } from '../models/dialog-data.model';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-image',
@@ -24,8 +23,6 @@ export class UploadImageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private imageService: ImageService,
-    private sanitizer: DomSanitizer
-
   ) { }
 
   ngOnInit(): void {
@@ -41,8 +38,6 @@ export class UploadImageComponent implements OnInit {
     const file = event.target.files[0];
     this.uploadImageForm.patchValue({ file: file });
 
-    console.log(event.target.files);
-
     const reader = new FileReader();
     if (file) {
       reader.readAsDataURL(file);
@@ -53,11 +48,6 @@ export class UploadImageComponent implements OnInit {
     };
    
   }
-
-  // onImageFileChange(event: Event): void {
-  //   const file = (event.target as HTMLInputElement).files?.[0];
-  //   this.processFile(file!);
-  // }
 
   onImageDrop(event: any): void {
     this.isDragOver = false;
@@ -89,10 +79,6 @@ export class UploadImageComponent implements OnInit {
     uploadModel.append('isForExchange', this.uploadImageForm.value.canBeExchanged);
     uploadModel.append('fileName', this.uploadImageForm.value.imageName);
 
-    console.log(this.uploadImageForm.value.file);
-    console.log(this.uploadedImageUrl);
-
-
     this.imageService.uploadImage(uploadModel).subscribe({
       next: (result: any) => {
         console.log(result);
@@ -101,5 +87,4 @@ export class UploadImageComponent implements OnInit {
       }
     });
   }
-
 }

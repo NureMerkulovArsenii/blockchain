@@ -7,8 +7,6 @@ const ipfsClient: IpfsClient = new IpfsClient();
 export async function uploadImage(file: Buffer, model: UploadImageRequest, userName: string): Promise<boolean> {
 
     try {
-        
-        //const buffer = Buffer.from(model.file, "base64");
         const fileCid = await ipfsClient.uploadFile(file);
 
         const contractResult = await storeImage(userName, fileCid, model.isVisiblePublicly, model.fileName, model.isForExchange);

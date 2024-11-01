@@ -23,7 +23,6 @@ export class LoginPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('login page init')
     this.initForm();
 
   }
@@ -77,7 +76,6 @@ export class LoginPageComponent implements OnInit {
   }
 
   register() {
-    console.log('login form submitted');
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
@@ -97,5 +95,4 @@ export class LoginPageComponent implements OnInit {
 
     }
   }
-
 }

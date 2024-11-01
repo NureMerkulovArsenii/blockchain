@@ -5,9 +5,6 @@ import { AuthRequestModel } from "../../models/request/auth-request.model";
 import { AuthResponseModel } from "../../models/response/auth-reponse.model";
 
 export async function login(model: AuthRequestModel): Promise<BaseResponseModel<AuthResponseModel>> {
-
-    console.log(model);
-
     const authResult = await loginUser(model.username, model.password);
     if(!authResult){
         return {

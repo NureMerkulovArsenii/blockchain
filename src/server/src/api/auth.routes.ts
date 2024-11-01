@@ -5,7 +5,6 @@ import { register } from '../handlers/auth/register.handler';
 
 const router = express.Router();
 
-
 router.post("/login", async (req: Request, res: Response) => {
     const model = req.body;
     const result = await login(model);

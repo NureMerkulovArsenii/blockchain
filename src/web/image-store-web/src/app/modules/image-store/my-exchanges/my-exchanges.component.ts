@@ -27,20 +27,16 @@ export class MyExchangesComponent implements OnInit {
 
   refresh() {
     this.exchangeService.getUserExchanges().subscribe((data) => {
-      console.log(data);
 
       data.forEach((exchangeRequest: ExchangeRequest) => {
         let exchangeRequestWithImages: ExchangeImage = exchangeRequest as ExchangeImage;
         exchangeRequestWithImages.id = exchangeRequest.exchangerLogin + exchangeRequest.imageHashToExchange;
 
         this.imageService.getImage(exchangeRequest.imageHashToExchange).subscribe((image: IpfsFile) => {
-          console.log(image);
           exchangeRequestWithImages.image1 = this.imageHelper.base64ToSafeUrl(image.file);
-          //generate a unique id for the exchange request based on the image hash
         });
 
         this.imageService.getImage(exchangeRequest.imageHashForExchange).subscribe((image: IpfsFile) => {
-          console.log(image);
           exchangeRequestWithImages.image2 = this.imageHelper.base64ToSafeUrl(image.file);
         });
 

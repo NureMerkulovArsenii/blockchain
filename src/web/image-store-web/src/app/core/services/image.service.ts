@@ -15,7 +15,6 @@ export class ImageService {
 
   constructor(private httpClient: HttpClient) { }
 
-
   getAllPublicImages() : Observable<ImageListItem[]> {
     return this.httpClient.get<ImageListItem[]>(this.baseUrl + '/get-all');
   }
@@ -31,5 +30,4 @@ export class ImageService {
   getImage(imageId: string) : Observable<IpfsFile> {
     return this.httpClient.get<IpfsFile>(this.baseUrl + '/get/' + imageId);
   }
-
 }

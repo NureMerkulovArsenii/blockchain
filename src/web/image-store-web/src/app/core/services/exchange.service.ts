@@ -13,7 +13,6 @@ export class ExchangeService {
 
   constructor(private httpClient: HttpClient) { }
 
-
   getUserExchanges() : Observable<ExchangeRequest[]> {
     return this.httpClient.get<ExchangeRequest[]>(this.baseUrl + '/my');
   }
@@ -29,5 +28,4 @@ export class ExchangeService {
   acceptExchange(request: ExchangeRequest) : Observable<any> {
     return this.httpClient.post(this.baseUrl + '/accept', request);
   }
-  
 }

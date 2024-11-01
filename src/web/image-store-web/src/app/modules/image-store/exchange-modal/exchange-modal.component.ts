@@ -19,7 +19,6 @@ export class ExchangeModalComponent implements OnInit {
   imageToExchangeUrl: SafeUrl | undefined;
   imageToExchangeItem!: ImageListItem;
 
-
   constructor(
     public dialogRef: MatDialogRef<ExchangeModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData<ImageListItem, null>,
@@ -52,7 +51,5 @@ export class ExchangeModalComponent implements OnInit {
       next: this.dialogRef.close();
       error: (error:any) => console.log(error);
     });
-
   }
-
 }
