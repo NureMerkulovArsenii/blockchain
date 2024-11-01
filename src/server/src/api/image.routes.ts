@@ -20,7 +20,7 @@ router.get("/my-images", authUser, async (req: Request, res: Response) => {
     res.json(images);
 });
 
-router.get("/get/:cid", async (req: Request, res: Response) => {
+router.get("/get/:cid", authUser, async (req: Request, res: Response) => {
     const cid = req.params.cid;
     const file = await getImageByIdHandle(cid);
 
@@ -32,7 +32,11 @@ router.post("/upload", authUser, async (req: Request, res: Response) => {
     try {
         const file = req.files!.file as fileUpload.UploadedFile;
         const username = getUserName(req);
-        await uploadImage(file.data, req.body, username);
+        const result = await uploadImage(file.data, req.body, username);
+        if (!result) {
+            res.status(500).json({ message: "Error uploading image" });
+            return;
+        }
         res.status(200).json({ message: "Image uploaded successfully" });
     } catch (error) {
         console.error(error);

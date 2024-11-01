@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { AccountService } from './core/services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -10,17 +11,15 @@ export class AppComponent {
   title = 'image-store-web';
 
   @ViewChild(MatSidenav)
-  //sidenav!: MatSidenav;
   isMobile = true;
   isCollapsed = false;
   currentLanguage: string = '';
   isAuthenticated: boolean = false;
 
-  //protected menuItems$!: Observable<MenuNodeResponse[]>;
-
   protected selected: number = -1;
 
   constructor(
+    private accountService: AccountService,
   ) {
     this.isUserAuthenticated();
 
@@ -32,7 +31,7 @@ export class AppComponent {
     if (!accessToken) {
       this.isAuthenticated = false;
       return false;
-    }  
+    }
 
     this.isAuthenticated = true;
 
@@ -40,12 +39,17 @@ export class AppComponent {
   }
 
   getCurrentUserName(): string {
-    const email = localStorage.getItem('user_email');
+    const email = localStorage.getItem('username');
     return email ? email : '';
   }
 
   logout = (): void => {
-    localStorage.removeItem('access_token');
-    window.location.reload();
+    this.accountService.logout().subscribe({
+      next: () => {
+        localStorage.removeItem('access_token');
+        window.location.reload();
+      }
+    });
+
   }
 }

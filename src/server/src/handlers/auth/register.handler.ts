@@ -15,12 +15,8 @@ export async function register(model: AuthRequestModel): Promise<BaseResponseMod
         }
     }
 
-    const token = createJwtToken({ username: model.username });
-
     const res =  {
-        data: {
-            accessToken: token
-        },
+        data: null,
         isSuccess: true,
         message: null
     }

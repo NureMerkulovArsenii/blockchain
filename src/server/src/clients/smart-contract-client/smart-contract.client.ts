@@ -10,13 +10,13 @@ let contract: any;
 
 const web3 = new Web3Lib.Web3('http://127.0.0.1:8545');
 
-let fromAddress : string;
+let fromAddress: string;
 
 export async function buildClient() {
     await deployContract();
     const contractAddress = userImageStore!.options.address;
-    contract = new web3.eth.Contract(abi, contractAddress);  
-    fromAddress = accounts![0]; 
+    contract = new web3.eth.Contract(abi, contractAddress);
+    fromAddress = accounts![0];
 }
 
 async function deployContract() {
@@ -29,11 +29,11 @@ async function deployContract() {
 //#region auth
 
 export async function registerUser(login: string, password: string): Promise<boolean> {
-    try{
+    try {
         await contract.methods.registerUser(login, password).send({ from: fromAddress });
         return true;
     }
-    catch(error){
+    catch (error) {
         console.error(error);
         return false;
     }
@@ -51,7 +51,12 @@ export async function loginUser(login: string, password: string): Promise<boolea
 }
 
 export async function logoutUser(login: string): Promise<void> {
-    await contract.methods.logoutUser(login).send({ from: fromAddress });
+    try {
+        await contract.methods.logoutUser(login).send({ from: fromAddress });
+    }
+    catch (error) {
+        console.error(error);
+    }
 }
 
 //#endregion
@@ -151,7 +156,7 @@ export async function cancelExchangeRequest(model: ExchangeRequest) {
 }
 
 export async function createExchangeRequest(model: ExchangeRequest) {
-    try {        
+    try {
         await contract.methods.createExchangeRequest(model.ownerLogin, model.exchangerLogin, model.imageHashToExchange, model.imageHashForExchange)
             .send({ from: fromAddress });
         return true;

@@ -10,19 +10,19 @@ import { BaseResponseModel } from '../models/base-response';
 })
 export class AccountService {
 
-  private baseUrl : string = environment.apiBaseUrl + '/auth';
+  private baseUrl: string = environment.apiBaseUrl + '/auth';
 
   constructor(private httpClient: HttpClient) { }
 
-  login(model: AuthModel) : Observable<BaseResponseModel<AuthResponseModel>> {
+  login(model: AuthModel): Observable<BaseResponseModel<AuthResponseModel>> {
     return this.httpClient.post<BaseResponseModel<AuthResponseModel>>(`${this.baseUrl}/login`, model);
   }
 
-  register(model: AuthModel) : Observable<BaseResponseModel<AuthResponseModel>> {
+  register(model: AuthModel): Observable<BaseResponseModel<AuthResponseModel>> {
     return this.httpClient.post<BaseResponseModel<AuthResponseModel>>(`${this.baseUrl}/register`, model);
   }
-  
+
   logout() {
-    localStorage.removeItem('access_token');
+    return this.httpClient.get(`${this.baseUrl}/logout`);
   }
 }

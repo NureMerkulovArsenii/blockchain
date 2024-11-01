@@ -33,6 +33,7 @@ export class ImageListItemComponent {
   }
 
   requestExchange(cid: string): void {
+    console.log(this.imageItem);
     const dialogRef = this.dialog.open(ExchangeModalComponent, {
       data: {data: this.imageItem, isEdit: false} as DialogData<ImageListItem, null>,
     });

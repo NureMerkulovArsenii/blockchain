@@ -1,41 +1,20 @@
 <ng-container *ngIf="isAuthenticated">
-    <mat-toolbar color="primary">
-      <!-- <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
-        <mat-icon>menu</mat-icon>
-      </button> -->
-      <h1>ImageStore</h1>
-      <span class="spacer"></span>
-      <div class="top-control-panel-group">
-        <span style="font-size: 14px; margin: 0 15px">{{ getCurrentUserName() }}</span>
-        <button mat-icon-button aria-label="Logout icon" class="logout-icon" (click)="logout()"
-                *ngIf="isUserAuthenticated()">
-          <mat-icon>exit_to_app</mat-icon>
-        </button>
-      </div>
-  
-    </mat-toolbar>
-    <mat-sidenav-container autosize>
-      <mat-sidenav [ngClass]="!isCollapsed ? 'expanded' : ''" [mode]="isMobile ? 'over' : 'side'"
-                   [opened]="isMobile ? 'false' : 'true'">
-        <!-- <mat-nav-list>
-          <ng-container *ngFor="let menuItem of menuItems$ | async">
-            <a mat-list-item [routerLink]="menuItem.url" > 
-              <span class="entry">
-                 <i [ngClass]="menuItem.icon"></i>
-                <span *ngIf="!isCollapsed">{{ menuItem.title!| translate }}</span>
-              </span>
-            </a>
-          </ng-container>
-        </mat-nav-list> -->
-      </mat-sidenav>
-      <mat-sidenav-content>
-        <router-outlet></router-outlet>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  </ng-container>
-  
-  <ng-container *ngIf="!isAuthenticated">
-    <app-login-page></app-login-page>
-    <!-- <router-outlet></router-outlet> -->
+  <mat-toolbar color="primary" class="d-flex justify-content-between">
+    <h1>ImageStore</h1>
+    <span class="spacer"></span>
+    <div class="d-flex align-items-center float-end">
+      <span style="font-size: 14px; margin: 0 15px">{{ getCurrentUserName() }}</span>
+      <button mat-icon-button aria-label="Logout icon" class="logout-icon" (click)="logout()"
+        *ngIf="isUserAuthenticated()">
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
+    </div>
 
-  </ng-container>
+  </mat-toolbar>
+
+  <router-outlet></router-outlet>
+</ng-container>
+
+<ng-container *ngIf="!isAuthenticated">
+  <app-login-page></app-login-page>
+</ng-container>

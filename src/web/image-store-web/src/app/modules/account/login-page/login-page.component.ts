@@ -64,6 +64,8 @@ export class LoginPageComponent implements OnInit {
             localStorage.setItem("username", username ?? "");
             localStorage.setItem("access_token", response.data?.accessToken ?? "");
             window.location.reload();
+          } else{
+            this.toastr.error(response.message ?? 'Error', 'Error');
           }
         },
         error: (error) => {

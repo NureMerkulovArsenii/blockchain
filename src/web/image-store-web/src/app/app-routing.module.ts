@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./modules/image-store/image-store.module').then(m => m.ImageStoreModule) },
+  { path: '', canActivate: [authGuard], loadChildren: () => import('./modules/image-store/image-store.module').then(m => m.ImageStoreModule) },
 ];
 
 @NgModule({
