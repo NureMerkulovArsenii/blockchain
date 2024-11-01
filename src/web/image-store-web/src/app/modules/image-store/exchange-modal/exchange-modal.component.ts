@@ -47,9 +47,10 @@ export class ExchangeModalComponent implements OnInit {
       ownerLogin: this.data.data!.username,
       exchangerLogin: this.imageToExchangeItem.username
     };
-    this.exchangeService.createExchange(requestModel).subscribe(() => {
-      next: this.dialogRef.close();
-      error: (error:any) => console.log(error);
+    
+    this.exchangeService.createExchange(requestModel).subscribe({
+      next: () => this.dialogRef.close(),
+      error: (error: any) => console.log(error)
     });
   }
 }
