@@ -62,6 +62,18 @@ describe('UserImageStore Contract', function () {
         expect(publicImages).to.be.an('array').that.is.not.empty;
         expect(publicImages[0].imageName).to.equal("Image1");
     });
+    
+    it('should update an existing image', async () => {
+        await userImageStore.methods.storeImage("testUser1", web3.utils.keccak256("imageToUpdateHash"), true, "InitialImage", true).send({ from: accounts[0] });
+        await userImageStore.methods.updateImage("testUser1", web3.utils.keccak256("imageToUpdateHash"), false, false).send({ from: accounts[0] });
+    
+        const imagesUser1 = await userImageStore.methods.getImagesByUserLogin("testUser1").call();
+        const updatedImage = imagesUser1.find(img => img.imageHash === web3.utils.keccak256("imageToUpdateHash"));
+    
+        expect(updatedImage).to.exist;
+        expect(updatedImage.visiblePublicly).to.be.false;
+        expect(updatedImage.canBeExchanged).to.be.false;
+    });
 
     it('should log out a user and fail getImagesByUserLogin after logout', async () => {
         await userImageStore.methods.logoutUser("testUser1").send({ from: accounts[0] });
@@ -71,7 +83,7 @@ describe('UserImageStore Contract', function () {
             console.log("getImagesByUserLogin failed after logout as expected:", error.cause.errorArgs);
         }
     });
-
+    
     describe('Exchange Requests', function () {
         before(async () => {
             await deploy();

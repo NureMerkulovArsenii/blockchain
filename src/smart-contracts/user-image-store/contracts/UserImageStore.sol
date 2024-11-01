@@ -67,7 +67,7 @@ contract UserImageStore is ERC721, Ownable {
     ) public {
         User storage user = users[userLogin];
         require(user.isLoggedIn, "User must be logged in to store images.");
-
+      
         imageHashes.push(_imageHash);
 
         images[_imageHash] = Image({
@@ -77,8 +77,32 @@ contract UserImageStore is ERC721, Ownable {
             imageName: _imageName,
             canBeExchanged: _canBeExchanged
         });
-
+        
         _mint(msg.sender, uint256(keccak256(abi.encodePacked(_imageHash))));
+    }
+
+    function updateImage(
+        string memory userLogin,
+        string memory _imageHash,
+        bool _visiblePublicly,
+        bool _canBeExchanged
+    ) public {
+        User storage user = users[userLogin];
+        require(user.isLoggedIn, "User must be logged in to update images.");
+
+        bool imageExists = false;
+        for (uint256 i = 0; i < imageHashes.length; i++) {
+            if (keccak256(abi.encodePacked(imageHashes[i])) == keccak256(abi.encodePacked(_imageHash))) {
+                imageExists = true;
+                break;
+            }
+        }
+
+        require(imageExists, "Image for update does not exist");
+
+        Image storage existingImage = images[_imageHash];
+        existingImage.visiblePublicly = _visiblePublicly;
+        existingImage.canBeExchanged = _canBeExchanged;
     }
 
     function exchangeImages(
@@ -87,6 +111,9 @@ contract UserImageStore is ERC721, Ownable {
         string memory ciIdToSuggest,
         string memory ciToExchange
     ) public {
+        User storage user = users[ownerLogin];
+        require(user.isLoggedIn, "User must be logged in to exchange images.");
+
         Image storage imageToSuggest = images[ciIdToSuggest];
         Image storage imageToExchange = images[ciToExchange];
 
@@ -122,7 +149,7 @@ contract UserImageStore is ERC721, Ownable {
 
     function getImagesByUserLogin(string memory userLogin) public view returns (Image[] memory) {
         User storage user = users[userLogin];
-        require(user.isLoggedIn, "User must be logged in to store images.");
+        require(user.isLoggedIn, "User must be logged in to get images.");
 
         uint256 userImageCount = 0;
 
@@ -172,6 +199,9 @@ contract UserImageStore is ERC721, Ownable {
     }
 
     function getExchangeRequests(string memory ownerLogin) public view returns (ExchangeRequest[] memory) {
+        User storage user = users[ownerLogin];
+        require(user.isLoggedIn, "User must be logged in to see exchange requests.");
+
         return exchangeRequests[ownerLogin];
     }
 
@@ -181,6 +211,9 @@ contract UserImageStore is ERC721, Ownable {
         string memory cidToExchange,
         string memory cidForExchange
     ) public {
+        User storage user = users[exchangerLogin];
+        require(user.isLoggedIn, "User must be logged in to create exchange requests.");
+
         require(images[cidToExchange].canBeExchanged, "Owner's image is not exchangeable.");
         require(images[cidForExchange].canBeExchanged, "Exchanger's image is not exchangeable.");
 
@@ -198,6 +231,9 @@ contract UserImageStore is ERC721, Ownable {
         string memory cidToExchange,
         string memory cidForExchange
     ) public {
+        User storage user = users[ownerLogin];
+        require(user.isLoggedIn, "User must be logged in to cancel exchange requests.");
+
         ExchangeRequest[] storage requests = exchangeRequests[ownerLogin];
         bool requestFound = false;
 
@@ -212,6 +248,7 @@ contract UserImageStore is ERC721, Ownable {
                 for (uint256 j = i; j < requests.length - 1; j++) {
                     requests[j] = requests[j + 1];
                 }
+
                 requests.pop();
                 break;
             }
