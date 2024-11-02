@@ -44,9 +44,9 @@ export class AppComponent {
   }
 
   logout = (): void => {
+    localStorage.removeItem('access_token');
     this.accountService.logout().subscribe({
       next: () => {
-        localStorage.removeItem('access_token');
         window.location.reload();
       }
     });

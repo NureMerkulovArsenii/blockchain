@@ -11,8 +11,8 @@
         <app-my-images (imageSelected)="onImageSelected($event)"></app-my-images>
       </ng-container>
       <ng-container *ngIf="imageToExchangeUrl != undefined">
-        <div>{{data.data?.imageName}}</div>
-        <div>{{data.data?.username}}</div>
+        <div>{{imageToExchangeItem.imageName}}</div>
+        <div>{{imageToExchangeItem.username}}</div>
         <div class="image-container w-100">
           <img mat-card-image [src]="imageToExchangeUrl" alt="{{ data.data }}" class="w-100">
           <button (click)="selectImage()" class="close-button"><mat-icon>close</mat-icon></button>

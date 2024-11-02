@@ -6,6 +6,7 @@ import fileUpload from 'express-fileupload';
 import { getUserImages } from '../handlers/image/get-my-images.handler';
 import { getImageByIdHandle } from '../handlers/image/get-image-by-id.handler';
 import { updateImageHandle } from '../handlers/image/update-image.handler';
+import { UploadImageRequest } from '../models/request/upload-image-request.model';
 
 const router = express.Router();
 
@@ -32,7 +33,13 @@ router.post("/upload", authUser, async (req: Request, res: Response) => {
     try {
         const file = req.files!.file as fileUpload.UploadedFile;
         const username = getUserName(req);
-        const result = await uploadImage(file.data, req.body, username);
+        const model:  UploadImageRequest = {
+            isForExchange: req.body.isForExchange == 'true',
+            isVisiblePublicly: req.body.isVisiblePublicly == 'true',
+            fileName: req.body.fileName
+        };
+
+        const result = await uploadImage(file.data, model, username);
         if (!result) {
             res.status(500).json({ message: "Error uploading image" });
             return;

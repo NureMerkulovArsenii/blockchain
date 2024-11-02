@@ -26,6 +26,7 @@ export class MyExchangesComponent implements OnInit {
   }
 
   refresh() {
+    this.exchangeRequests = [];
     this.exchangeService.getUserExchanges().subscribe((data) => {
 
       data.forEach((exchangeRequest: ExchangeRequest) => {
@@ -57,7 +58,8 @@ export class MyExchangesComponent implements OnInit {
     };
 
     this.exchangeService.acceptExchange(request).subscribe(() => {
-      this.refresh();
+      //this.refresh();
+      window.location.reload();
     });
   }
 
@@ -70,7 +72,7 @@ export class MyExchangesComponent implements OnInit {
     };
 
     this.exchangeService.cancelExchange(request).subscribe(() => {
-      this.refresh();
+      window.location.reload();
     });
   }
 
